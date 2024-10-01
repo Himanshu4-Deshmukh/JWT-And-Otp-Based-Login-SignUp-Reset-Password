@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 // JWT Secret Key
-const JWT_SECRET = 'secret'; / 
+const JWT_SECRET = 'secret'; 
 
 // Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
