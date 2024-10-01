@@ -1,0 +1,84 @@
+openapi: 3.0.0
+info:
+  title: JWT Authentication API
+  version: 1.0.0
+  description: API for JWT-based authentication
+servers:
+  - url: http://localhost:3000
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: The user's username.
+        password:
+          type: string
+          description: The user's password.
+      example:
+        username: user1
+        password: password123
+security:
+  - bearerAuth: []
+
+paths:
+  /signup:
+    post:
+      summary: Register a new user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        200:
+          description: User created successfully
+        400:
+          description: Username already taken
+  /login:
+    post:
+      summary: Login and generate a JWT token
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        200:
+          description: JWT token generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: The generated JWT token
+        400:
+          description: Invalid username or password
+  /dashboard:
+    get:
+      summary: Access a protected route with JWT token
+      tags: [Auth]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Welcome to the protected Dashboard
+        401:
+          description: Access Denied. No token provided.
+        403:
+          description: Invalid token
