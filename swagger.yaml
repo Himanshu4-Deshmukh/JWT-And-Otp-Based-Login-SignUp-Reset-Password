@@ -82,3 +82,40 @@ paths:
           description: Access Denied. No token provided.
         403:
           description: Invalid token
+
+  /request-reset-password:
+    post:
+      summary: Request a password reset token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+      responses:
+        200:
+          description: Token generated
+        400:
+          description: User not found
+  /reset-password:
+    post:
+      summary: Reset password with the reset token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resetToken:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        200:
+          description: Password has been reset
+        400:
+          description: Invalid or expired token
